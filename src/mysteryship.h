@@ -1,14 +1,17 @@
 #pragma once
 #include <raylib.h>
 
-class Laser {
+class MysteryShip {
     public:
-        Laser(Vector2 position, int speed);
+        MysteryShip();
+        ~MysteryShip();
         void Update();
         void Draw();
+        void Spawn();
         Rectangle getRect();
-        bool active;
+        bool alive;
     private:
         Vector2 position;
+        Texture2D image;
         int speed;
 };
