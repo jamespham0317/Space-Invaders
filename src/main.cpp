@@ -34,6 +34,9 @@ int main()
             DrawTextEx(font, "LEVEL", {570, 740}, 34, 2, yellow);
             std::string levelText = FormatWithLeadingZeros(game.level, 2);
             DrawTextEx(font, levelText.c_str(), {670, 740}, 34, 2, yellow);
+            if (game.gameWon) {
+                DrawTextEx(font, "YOU WON", {275, 300}, 68, 2, yellow);
+            } 
         } else {
             DrawTextEx(font, "GAME OVER", {570, 740}, 34, 2, yellow);
         }
@@ -44,12 +47,12 @@ int main()
         }
 
         DrawTextEx(font, "SCORE", {50, 15}, 34, 2, yellow);
-        std::string scoreText = FormatWithLeadingZeros(game.score, 5);
+        std::string scoreText = FormatWithLeadingZeros(game.score, 6);
         DrawTextEx(font, scoreText.c_str(), {50, 40}, 34, 2, yellow);
 
         DrawTextEx(font, "HIGH-SCORE", {570, 15}, 34, 2, yellow);
-        std::string highscoreText = FormatWithLeadingZeros(game.highscore, 5);
-        DrawTextEx(font, highscoreText.c_str(), {655, 40}, 34, 2, yellow);
+        std::string highscoreText = FormatWithLeadingZeros(game.highscore, 6);
+        DrawTextEx(font, highscoreText.c_str(), {635, 40}, 34, 2, yellow);
 
         game.Draw();
         EndDrawing(); 

@@ -16,6 +16,7 @@ class Game{
         int score;
         int highscore;
         int level;
+        bool gameWon;
     private:
     Spaceship spaceship;
         std::vector<Obstacle> obstacles;

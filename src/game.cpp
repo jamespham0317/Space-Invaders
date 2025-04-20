@@ -18,7 +18,7 @@ void Game::Update()
     if (run) {
         double currentTime = GetTime();
 
-        if (currentTime - timeLastSpawn > mysteryShipSpawnInterval) {
+        if (currentTime - timeLastSpawn > mysteryShipSpawnInterval && !gameWon) {
             mysteryship.Spawn();
             timeLastSpawn = GetTime();
             mysteryShipSpawnInterval = GetRandomValue(10, 20);
@@ -36,19 +36,25 @@ void Game::Update()
         }
 
         if (levelCleared) {
-            level++;
-            aliens = CreateAliens();
-            aliensDirection = 1;
-            timeLastAlienFired = 0.0;
-            spaceship.lasers.clear();
-            alienLasers.clear();
-            levelCleared = false;
+            if (level == 10) {
+                gameWon = true;
+                alienLasers.clear();
+            } else {
+                level++;
+                aliens = CreateAliens();
+                aliensDirection = 1;
+                timeLastAlienFired = 0.0;
+                spaceship.lasers.clear();
+                alienLasers.clear();
+                levelCleared = false;
+            }
         }
         
         DeleteInactiveLasers();
         mysteryship.Update();
         CheckForCollisions();
-    } else {
+    } 
+    if (!run || gameWon) {
         if (IsKeyDown(KEY_ENTER)) {
             Reset();
             InitGame();
@@ -133,50 +139,50 @@ std::vector<Alien> Game::CreateAliens() {
             float y = 110 + row * 55;
 
             switch (level) {
-                case 1: // Classic formation
+                case 1: 
                     alienType = (row == 0) ? 3 : (row < 3) ? 2 : 1;
                     break;
 
-                case 2: // Stronger on edges
+                case 2: 
                     alienType = (column == 0 || column == 10) ? 3 : (column < 3 || column > 7) ? 2 : 1;
                     break;
 
-                case 3: // Checkerboard
+                case 3: 
                     if ((row + column) % 2 == 0) alienType = 3;
                     else alienType = 1;
                     break;
 
-                case 4: // Inverted triangle
+                case 4:
                     if (column >= row && column < 11 - row) alienType = 2 + (row == 0);
                     else continue;
                     break;
 
-                case 5: // Hollow rectangle
+                case 5: 
                     if (row == 0 || row == 4 || column == 0 || column == 10) alienType = 2;
                     else continue;
                     break;
 
-                case 6: // Narrow vertical band
+                case 6: 
                     if (column >= 4 && column <= 6) alienType = row + 1;
                     else continue;
                     break;
 
-                case 7: // Two horizontal swarms
+                case 7: 
                     if (row == 1 || row == 3) alienType = (row == 1) ? 3 : 2;
                     else continue;
                     break;
 
-                case 8: // Diagonals
+                case 8:
                     if (column == row || column == 10 - row) alienType = 3;
                     else continue;
                     break;
 
-                case 9: // Random gaps + mix
+                case 9: 
                     if ((row + column) % 3 == 0) continue;
                     alienType = (row + column) % 3 + 1;
                     break;
 
-                case 10: // Randomized types
+                case 10: 
                     alienType = 1 + rand() % 3;
                     break;
 
@@ -344,6 +350,7 @@ void Game::InitGame()
     run = true;
     mysteryShipSpawnInterval = GetRandomValue(10, 20);
     levelCleared = false;
+    gameWon = false;
 }
 
 void Game::checkForHighScore()
