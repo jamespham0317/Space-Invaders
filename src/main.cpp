@@ -31,7 +31,9 @@ int main()
         DrawRectangleRoundedLinesEx({10, 10, 780, 780}, 0.18f, 20, 2, yellow);
         DrawLineEx({25, 730}, {775, 730}, 3, yellow);
         if (game.run) {
-            DrawTextEx(font, "LEVEL 01", {570, 740}, 34, 2, yellow);
+            DrawTextEx(font, "LEVEL", {570, 740}, 34, 2, yellow);
+            std::string levelText = FormatWithLeadingZeros(game.level, 2);
+            DrawTextEx(font, levelText.c_str(), {670, 740}, 34, 2, yellow);
         } else {
             DrawTextEx(font, "GAME OVER", {570, 740}, 34, 2, yellow);
         }

@@ -34,6 +34,16 @@ void Game::Update()
         for (auto& laser: alienLasers) {
             laser.Update();
         }
+
+        if (levelCleared) {
+            level++;
+            aliens = CreateAliens();
+            aliensDirection = 1;
+            timeLastAlienFired = 0.0;
+            spaceship.lasers.clear();
+            alienLasers.clear();
+            levelCleared = false;
+        }
         
         DeleteInactiveLasers();
         mysteryship.Update();
@@ -113,25 +123,72 @@ std::vector<Obstacle> Game::CreateObstacles()
     return obstacles;
 }
 
-std::vector<Alien> Game::CreateAliens()
-{
+std::vector<Alien> Game::CreateAliens() {
     std::vector<Alien> aliens;
+
     for (int row = 0; row < 5; row++) {
         for (int column = 0; column < 11; column++) {
-            int alienType;
-            if (row == 0) {
-                alienType = 3;
-            } else if (row == 1 || row == 2) {
-                alienType = 2;
-            } else {
-                alienType = 1;
-            }
-
+            int alienType = 1;
             float x = 75 + column * 55;
             float y = 110 + row * 55;
+
+            switch (level) {
+                case 1: // Classic formation
+                    alienType = (row == 0) ? 3 : (row < 3) ? 2 : 1;
+                    break;
+
+                case 2: // Stronger on edges
+                    alienType = (column == 0 || column == 10) ? 3 : (column < 3 || column > 7) ? 2 : 1;
+                    break;
+
+                case 3: // Checkerboard
+                    if ((row + column) % 2 == 0) alienType = 3;
+                    else alienType = 1;
+                    break;
+
+                case 4: // Inverted triangle
+                    if (column >= row && column < 11 - row) alienType = 2 + (row == 0);
+                    else continue;
+                    break;
+
+                case 5: // Hollow rectangle
+                    if (row == 0 || row == 4 || column == 0 || column == 10) alienType = 2;
+                    else continue;
+                    break;
+
+                case 6: // Narrow vertical band
+                    if (column >= 4 && column <= 6) alienType = row + 1;
+                    else continue;
+                    break;
+
+                case 7: // Two horizontal swarms
+                    if (row == 1 || row == 3) alienType = (row == 1) ? 3 : 2;
+                    else continue;
+                    break;
+
+                case 8: // Diagonals
+                    if (column == row || column == 10 - row) alienType = 3;
+                    else continue;
+                    break;
+
+                case 9: // Random gaps + mix
+                    if ((row + column) % 3 == 0) continue;
+                    alienType = (row + column) % 3 + 1;
+                    break;
+
+                case 10: // Randomized types
+                    alienType = 1 + rand() % 3;
+                    break;
+
+                default:
+                    alienType = 1;
+                    break;
+            }
+
             aliens.push_back(Alien(alienType, {x, y}));
         }
     }
+
     return aliens;
 }
 
@@ -188,6 +245,9 @@ void Game::CheckForCollisions()
                 checkForHighScore();
                 it = aliens.erase(it);
                 laser.active = false;
+                if (aliens.empty()) {
+                    levelCleared = true;
+                }
             } else {
                 ++it;
             }
@@ -273,6 +333,7 @@ void Game::Reset()
 void Game::InitGame()
 {
     obstacles = CreateObstacles();
+    level = 1;
     aliens = CreateAliens();
     aliensDirection = 1;
     timeLastAlienFired = 0.0;
@@ -282,6 +343,7 @@ void Game::InitGame()
     highscore = loadHighscoreFromFile();
     run = true;
     mysteryShipSpawnInterval = GetRandomValue(10, 20);
+    levelCleared = false;
 }
 
 void Game::checkForHighScore()

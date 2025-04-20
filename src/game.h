@@ -15,7 +15,15 @@ class Game{
         int lives;
         int score;
         int highscore;
+        int level;
     private:
+    Spaceship spaceship;
+        std::vector<Obstacle> obstacles;
+        std::vector<Alien> aliens;
+        MysteryShip mysteryship;
+        int aliensDirection;
+        std::vector<Laser> alienLasers;
+
         void DeleteInactiveLasers();
         std::vector<Obstacle> CreateObstacles();
         std::vector<Alien> CreateAliens();
@@ -29,14 +37,9 @@ class Game{
         void checkForHighScore();
         void saveHighscoreToFile(int highscore);
         int loadHighscoreFromFile();
-        Spaceship spaceship;
-        std::vector<Obstacle> obstacles;
-        std::vector<Alien> aliens;
-        int aliensDirection;
-        std::vector<Laser> alienLasers;
         constexpr static float alienLaserShootInterval = 0.3;
         float timeLastAlienFired;
-        MysteryShip mysteryship;
         float mysteryShipSpawnInterval;
         float timeLastSpawn;
+        bool levelCleared;
 };
