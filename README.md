@@ -1,7 +1,9 @@
 # Space Invaders
 
 ## Introduction
-This project is a modern reimagining of the classic Space Invaders arcade game, built using C++ and the raylib graphics library.
+A modern reimagining of the classic Space Invaders arcade game, built using C++ and [Raylib](https://www.raylib.com/).
+
+---
 
 ## Features
 - Classic wave-based enemy mechanics
@@ -11,6 +13,8 @@ This project is a modern reimagining of the classic Space Invaders arcade game, 
 - Game over conditions
 - Clean, modular code using knowledge of object-oriented programming in C++
 
+---
+
 ## Controls
 | Action           | Key             |
 |------------------|-----------------|
@@ -19,17 +23,28 @@ This project is a modern reimagining of the classic Space Invaders arcade game, 
 | Shoot            | `Spacebar`      |
 | Restart Game     | `↵` or `Enter`  |
 
+---
+
 ## Getting Started
 
 Follow these instructions to build and run the project on your machine.
 
+---
+
 ### Prerequisites
 
-- C++ compiler (e.g. `g++`, `clang`, or Visual Studio)
-- [raylib library](https://github.com/raysan5/raylib/wiki/Working-on-your-first-raylib-project) installed  
+- C++ compiler 
+- [Raylib](https://github.com/raysan5/raylib/wiki/Working-on-your-first-raylib-project) (installed locally)
   
-### Clone the Repository
+## Building the Project
 
 ```bash
+# Clone the repo
 git clone https://github.com/jamespham0317/Space-Invaders.git
-cd Space-Invaders
+cd spaceinvaders
+
+# Build
+make
+
+# Run the program
+./main
